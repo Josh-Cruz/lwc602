@@ -1,0 +1,16 @@
+<template>
+
+    <lightning-card  class="slds-clearfix slds-var-p-around_medium	">
+        <h3 slot="title" >
+            <lightning-icon icon-name="standard:date_time" size="small"></lightning-icon>
+            <span class="slds-p-horizontal_small">Current Date And Time</span>
+            <lightning-button-icon  class="slds-float_right" icon-name="utility:refresh"  variant="border-filled" alternative-text="Refresh" title="Refresh" onclick={getDateTime}></lightning-button-icon>
+        </h3>
+        <h4 class="slds-p-horizontal_medium">
+            <lightning-formatted-date-time value={currTime} year="numeric" month="numeric" day="numeric" hour="numeric"
+                minute="numeric" second="numeric" weekday="long"></lightning-formatted-date-time>
+        </h4>
+
+    </lightning-card>
+
+</template>
