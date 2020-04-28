@@ -6,25 +6,27 @@ import { CurrentPageReference } from 'lightning/navigation';
 export default class StudentBrowser extends LightningElement {
 
     selectedDeliveryId = '';
-selectedInstructorId = '';
+    selectedInstructorId = '';
 
-@wire(CurrentPageReference) pageRef;
+    @wire(CurrentPageReference) pageRef;
 
-@wire(getStudents, { instructorId: '$selectedInstructorId',
-courseDeliveryId: '$selectedDeliveryId' })
-students;
+    @wire(getStudents, {
+        instructorId: '$selectedInstructorId',
+        courseDeliveryId: '$selectedDeliveryId'
+    })
+    students;
 
-handleFilterChange(event){
-    this.selectedDeliveryId = event.detail.deliveryId;
-    this.selectedInstructorId = event.detail.instructorId;
+    handleFilterChange(event) {
+        this.selectedDeliveryId = event.detail.deliveryId;
+        this.selectedInstructorId = event.detail.instructorId;
     }
 
-    handleStudentSelected(event){
+    handleStudentSelected(event) {
         const studentId = event.detail.studentId;
         this.updateSelectedStudent(studentId);
-        }
-        updateSelectedStudent(studentId){
-            fireEvent(this.pageRef, 'studentChange', { studentId });
-            }
+    }
+    updateSelectedStudent(studentId) {
+        fireEvent(this.pageRef, 'studentChange', { studentId });
+    }
 
 }
