@@ -1,16 +1,17 @@
 import { LightningElement, track, wire } from 'lwc';
-import getInstructors from
-    '@salesforce/apex/StudentBrowserForm.getInstructors';
-import getDeliveriesByInstructor from
-    '@salesforce/apex/StudentBrowserForm.getDeliveriesByInstructor';
+import getInstructors from '@salesforce/apex/StudentBrowserForm.getInstructors';
+import getDeliveriesByInstructor from '@salesforce/apex/StudentBrowserForm.getDeliveriesByInstructor';
+import { NavigationMixin } from 'lightning/navigation';
+import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 
 
-export default class StudentBrowserForm extends LightningElement {
+export default class StudentBrowserForm extends NavigationMixin(LightningElement) {
     @track instructors;
     error;
     selectedInstructorId = '';
     @track deliveries;
     selectedDeliveryId = '';
+    isButtonDisabled = true;
 
     @wire(getInstructors)
     wired_getInstructors({ error, data }) {
@@ -63,6 +64,7 @@ export default class StudentBrowserForm extends LightningElement {
     onInstructorChange(event) {
         this.selectedDeliveryId = '';
         this.selectedInstructorId = event.target.value;
+        this.isButtonDisabled = (this.selectedInstructorId === '');
         this.notifyParent();
     }
     onDeliveryChange(event) {
@@ -78,5 +80,23 @@ export default class StudentBrowserForm extends LightningElement {
             }
         });
         this.dispatchEvent(evt);
+    }
+
+    onAddNewDelivery() {
+        // Opens the new Course Delivery record modal dialog
+        // with the selected InstructorId prepopulated
+        let pageInfo = {
+            type: "standard__objectPage",
+            attributes: {
+                objectApiName: "Course_Delivery__c",
+                actionName: "new"
+            },
+            state: {
+                defaultFieldValues: encodeDefaultFieldValues({
+                    Instructor__c: this.selectedInstructorId
+                })
+            }
+        };
+        this[NavigationMixin.Navigate](pageInfo);
     }
 }
