@@ -3,6 +3,7 @@ import getCertifiedStudents from '@salesforce/apex/CertifiedStudentList.getCerti
 import deleteStudentCertification from '@salesforce/apex/CertifiedStudentList.deleteStudentCertification';
 import { refreshApex } from '@salesforce/apex';
 import Utils from 'c/utils';
+import LABEL_FEATURE_NOT_AVAILABLE from '@salesforce/label/c.Feature_Not_Available';
 
 
 export default class CertifiedStudentList extends LightningElement {
@@ -86,17 +87,17 @@ export default class CertifiedStudentList extends LightningElement {
 
         switch (btnClicked) {
             case 'btnEmail':
-            this.notAvailable();
-            break;
+                this.notAvailable();
+                break;
             case 'btnSendCert':
-            this.notAvailable();
-            break;
+                this.notAvailable();
+                break;
             case 'btnDelete':
-            this.onDelete();
-            break;
+                this.onDelete();
+                break;
             default:
-            break;
-            }
+                break;
+        }
 
     }
 
@@ -110,10 +111,11 @@ export default class CertifiedStudentList extends LightningElement {
                 this.error = error;
             });
     }
-    
+
     notAvailable() {
-        Utils.showModal(this,'Not Available', 'This feature is currently unavailable');
-        }
+        Utils.showModal(this, 'Not Available',
+            LABEL_FEATURE_NOT_AVAILABLE);
+    }
 
 
 }
