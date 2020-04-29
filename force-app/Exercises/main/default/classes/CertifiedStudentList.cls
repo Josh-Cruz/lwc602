@@ -15,6 +15,11 @@ public static List<Certification_Held__c> getCertifiedStudents(Id
 	];
 
 }
-
+@AuraEnabled
+public static void deleteStudentCertification(List < String >
+                                              certificationIds) {
+	delete[SELECT id FROM Certification_Held__c WHERE Id IN:
+	       certificationIds];
+}
 
 }

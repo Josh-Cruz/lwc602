@@ -1,33 +1,39 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getCertifiedStudents from '@salesforce/apex/CertifiedStudentList.getCertifiedStudents';
+import deleteStudentCertification from '@salesforce/apex/CertifiedStudentList.deleteStudentCertification';
+import { refreshApex } from '@salesforce/apex';
+
 
 export default class CertifiedStudentList extends LightningElement {
     @api certificationId = 0;
     @api certificationName = '';
     @track certifiedStudents;
     error;
+    btnGroupDisabled = 'disabled';
     columnConfig = [
         {
-        label: 'Name',
-        fieldName: 'name',
-        type: 'text'
+            label: 'Name',
+            fieldName: 'name',
+            type: 'text'
         },
         {
-        label: 'Date',
-        fieldName: 'date',
-        type: 'text'
+            label: 'Date',
+            fieldName: 'date',
+            type: 'text'
         },
         {
-        label: 'Email',
-        fieldName: 'email',
-        type: 'email'
+            label: 'Email',
+            fieldName: 'email',
+            type: 'email'
         },
         {
-        label: 'Phone',
-        fieldName: 'phone',
-        type: 'phone'
+            label: 'Phone',
+            fieldName: 'phone',
+            type: 'phone'
         }
-        ];
+    ];
+
+    _wiredStudentResult;
 
 
     @wire(getCertifiedStudents, {
@@ -35,6 +41,7 @@ export default class CertifiedStudentList extends LightningElement {
             '$certificationId'
     })
     wired_getCertifiedStudents(result) {
+        this._wiredStudentResult = result;
         this.certifiedStudents = [];
         if (result.data) {
             result.data.forEach(student => {
@@ -50,6 +57,55 @@ export default class CertifiedStudentList extends LightningElement {
         } else if (result.error) {
             this.error = result.error;
         }
+    }
+
+    onRowSelection(event) {
+        let numSelected = event.detail.selectedRows.length;
+        this.btnGroupDisabled = (numSelected === 0);
+    }
+
+    getSelectedIDs() {
+
+        let datatable =
+            this.template.querySelector('lightning-datatable');
+
+        let selectedRows = datatable.getSelectedRows();
+
+        let ids = [];
+        selectedRows.forEach(r => {
+            ids.push(r.certificationHeldId)
+        });
+        return ids;
+
+
+    }
+
+    onCertActions(event) {
+        const btnClicked = event.target.getAttribute('data-btn-id');
+
+        switch (btnClicked) {
+            case 'btnEmail':
+                break;
+            case 'btnSendCert':
+                break;
+            case 'btnDelete':
+                this.onDelete();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    onDelete() {
+        let certificationIds = this.getSelectedIDs();
+        deleteStudentCertification({ certificationIds }).then(
+            () => {
+                refreshApex(this._wiredStudentResult);
+            })
+            .catch(error => {
+                this.error = error;
+            });
     }
 
 
