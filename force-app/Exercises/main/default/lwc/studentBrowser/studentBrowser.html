@@ -1,4 +1,5 @@
 <template>
+    <div class="slds-scrollable scrollerSize" >
     <c-student-browser-form onfilterchange={handleFilterChange}></c-student-browser-form>
     <lightning-tabset variant="scoped">
         <lightning-tab label="Gallery">
@@ -7,4 +8,5 @@
             </c-student-tiles>
             </lightning-tab>
         </lightning-tabset>
+        </div>
 </template>
