@@ -10,14 +10,22 @@ export default class ResponsiveDatatable extends LightningElement {
 	@api
 	get rowData() {
 		return this.rows;
-		}
-	
-		set rowData(value) {
-			if (typeof value !== "undefined") {
+	}
+
+	set rowData(value) {
+		if (typeof value !== "undefined") {
 			this.rows = this.reformatRows(value);
-			}
-			}
-	
+		}
+	}
+
+	@api setSelectedRecord(recordId) {
+		let mySelector = 'tr[data-pk="' + recordId + '"]';
+		let selectedRow = this.template.querySelector(mySelector);
+		if (selectedRow) {
+			this.highlightSelectedRow(selectedRow);
+		}
+	}
+
 	reformatRows = function (rowData) {
 		let colItems = this.columnConfig;
 		let reformattedRows = [];
@@ -74,13 +82,13 @@ export default class ResponsiveDatatable extends LightningElement {
 
 
 	highlightSelectedRow(target) {
-		
+
 		if (this._selectedRow) {
 			this._selectedRow.classList.remove("slds-is-selected")
-			}
-		
-			target.classList.add("slds-is-selected");
-			this._selectedRow = target;
+		}
+
+		target.classList.add("slds-is-selected");
+		this._selectedRow = target;
 	}
 
 }

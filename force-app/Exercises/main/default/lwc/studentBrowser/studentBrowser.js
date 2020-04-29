@@ -49,6 +49,15 @@ export default class StudentBrowser extends NavigationMixin(LightningElement) {
         this.updateSelectedStudent(studentId);
     }
     updateSelectedStudent(studentId) {
+        let grid =
+            this.template.querySelector('c-responsive-datatable');
+        let gallery = this.template.querySelector('c-student-tiles');
+        if (gallery) {
+            gallery.setSelectedStudent(studentId);
+        }
+        if (grid) {
+            grid.setSelectedRecord(studentId);
+        }
         fireEvent(this.pageRef, 'studentChange', { studentId });
     }
     handleRowDblClick(event) {
@@ -56,11 +65,16 @@ export default class StudentBrowser extends NavigationMixin(LightningElement) {
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
-            recordId: studentId,
-            objectApiName: 'Contact',
-            actionName: 'edit'
+                recordId: studentId,
+                objectApiName: 'Contact',
+                actionName: 'edit'
             }
-            });
-        }
+        });
+    }
+
+    handleRowClick(event) {
+        let studentId = event.detail.pk;
+        this.updateSelectedStudent(studentId);
+    }
 
 }
