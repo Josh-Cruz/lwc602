@@ -9,8 +9,6 @@ export default class StudentTile extends LightningElement {
     };
 
 
-
-
     get tileSelected() {
         return (this.selectedStudentId===this.student.Id) ? "tile selected" : "tile";
     }
