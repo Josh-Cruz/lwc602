@@ -16,7 +16,7 @@ export default class LayoutManager extends LightningElement {
 	modalContent = '';
 
 
-
+	loading = true;
 
 
 	connectedCallback() {
@@ -29,17 +29,30 @@ export default class LayoutManager extends LightningElement {
 		);
 	}
 
+	get studentBrowserView() {
+		return (this.viewMode === VIEW_STUDENT_BROWSER);
+	}
+	get tripReportView() {
+		return (this.viewMode === VIEW_TRIP_REPORTS);
+	}
+	get certifiedStudentsView() {
+		return (this.viewMode === VIEW_CERTIFICATION);
+	}
+	get certPopularityView() {
+		return (this.viewMode === VIEW_POPULARITY);
+	}
+
 	handleShowModal(event) {
 		this.modalHeader = event.detail.header;
 		this.modalContent = event.detail.content;
 		const modal = this.template.querySelector('c-modal');
 		modal.show();
 	}
-	
+
 	closeModal() {
 		const modal = this.template.querySelector('c-modal');
 		modal.hide();
-		}
+	}
 
 	handleNavItemSelected(event) {
 		const selectedItemName = event.detail.itemName;
@@ -58,16 +71,12 @@ export default class LayoutManager extends LightningElement {
 		}
 	}
 
-	get studentBrowserView() {
-		return (this.viewMode === VIEW_STUDENT_BROWSER);
+
+
+	handleLoading() {
+		this.loading = true;
 	}
-	get tripReportView() {
-		return (this.viewMode === VIEW_TRIP_REPORTS);
-	}
-	get certifiedStudentsView() {
-		return (this.viewMode === VIEW_CERTIFICATION);
-	}
-	get certPopularityView() {
-		return (this.viewMode === VIEW_POPULARITY);
+	handleDoneLoading() {
+		this.loading = false;
 	}
 }
