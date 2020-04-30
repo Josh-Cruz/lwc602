@@ -30,6 +30,7 @@ export default class TripReportFormAdvanced extends LightningElement {
 
     error;
     _editorInitialized;
+    saveButtonDisabled = true;
 
     @api recordId;
 
@@ -111,6 +112,10 @@ export default class TripReportFormAdvanced extends LightningElement {
         }
     }
 
+    onBlur() {
+        this.saveButtonDisabled = !this.validateFields();
+    }
+
     //TODO #4: set the value of the private tracked properties when they're changed in the form
     onInstructorChange(event) {
         this.instructorId = event.target.value;
@@ -136,16 +141,18 @@ export default class TripReportFormAdvanced extends LightningElement {
     }
     saveTripReport() {
         const fieldsToSave = {}
-fieldsToSave[FIELD_DATE.fieldApiName] = this.dateVisited;
-fieldsToSave[FIELD_INSTRUCTOR.fieldApiName] = this.instructorId;
-fieldsToSave[FIELD_RATING.fieldApiName] = this.rating;
-fieldsToSave[FIELD_REVIEWTYPE.fieldApiName] = this.reviewType;
-fieldsToSave[FIELD_REVIEW.fieldApiName] = this.review;
-fieldsToSave[FIELD_NAME.fieldApiName] = this.locationName;
+        fieldsToSave[FIELD_DATE.fieldApiName] = this.dateVisited;
+        fieldsToSave[FIELD_INSTRUCTOR.fieldApiName] = this.instructorId;
+        fieldsToSave[FIELD_RATING.fieldApiName] = this.rating;
+        fieldsToSave[FIELD_REVIEWTYPE.fieldApiName] = this.reviewType;
+        fieldsToSave[FIELD_REVIEW.fieldApiName] = this.review;
+        fieldsToSave[FIELD_NAME.fieldApiName] = this.locationName;
 
         if (!this.recordId) {
-            const recordInput = { fields:fieldsToSave, apiName:
-                OBJECT_TRIP_REPORT.objectApiName};t
+            const recordInput = {
+                fields: fieldsToSave, apiName:
+                    OBJECT_TRIP_REPORT.objectApiName
+            }; t
 
             createRecord(recordInput)
                 .then(tripReport => {
@@ -168,5 +175,18 @@ fieldsToSave[FIELD_NAME.fieldApiName] = this.locationName;
         }
 
     }
+
+    validateFields() {
+        let field = null;
+        let fields = this.template.querySelectorAll('.validateMe');
+        let result = true;
+        for (let i = 0; i < fields.length; i++) {
+            field = fields[i];
+            result = field.checkValidity();
+            if (!result) break;
+        }
+        return result;
+    }
+
 
 }
