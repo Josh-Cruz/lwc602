@@ -1,6 +1,28 @@
 <template>
+        <template if:true={name}>
 
-        <lightning-card title={name}>
-        </lightning-card>
-    
+                <lightning-card title={name}>
+                        <lightning-button label="Go To Record" title="Non-primary action"
+                                onclick={navigateToRecordEditPage} slot="actions">
+                        </lightning-button>
+                        <div class="slds-var-p-around_small">
+                                <p class="slds-var-p-around_xx-small">
+                                        <lightning-formatted-email value={email}></lightning-formatted-email>
+                                </p>
+                                <p class="slds-var-p-around_xx-small">
+                                        <lightning-formatted-phone value={phone}></lightning-formatted-phone>
+                                </p>
+                                <p class="slds-var-p-around_xx-small">
+                                        {description}
+                                </p>
+
+                        </div>
+
+
+
+                </lightning-card>
+
+        </template>
+
+
 </template>

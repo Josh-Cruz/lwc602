@@ -6,12 +6,13 @@ import FIELD_Name from '@salesforce/schema/Contact.Name';
 import FIELD_Description from '@salesforce/schema/Contact.Description';
 import FIELD_Email from '@salesforce/schema/Contact.Email';
 import FIELD_Phone from '@salesforce/schema/Contact.Phone';
+import { NavigationMixin } from 'lightning/navigation';
 
 const fields = [FIELD_Name, FIELD_Description, FIELD_Email,
     FIELD_Phone];
 
 
-export default class StudentDetail extends LightningElement {
+export default class StudentDetail extends NavigationMixin(LightningElement) {
     studentId;
 
     @wire(CurrentPageReference) pageRef;
@@ -26,6 +27,21 @@ export default class StudentDetail extends LightningElement {
     handleStudentChange(event) {
         this.studentId = event.studentId;
     }
+
+
+    navigateToRecordEditPage() {
+        // Opens the Account record modal
+        // to view a particular record.
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: this.studentId,
+                objectApiName: 'Contact', // objectApiName is optional
+                actionName: 'edit'
+            }
+        });
+    }
+
 
 
 
